@@ -20,7 +20,7 @@ export function getItem(itemId: string) {
     });
 }
 
-export function addItem(item: Item) {
+export function addItem(item: Omit<Item, "id">) {
     return fetch(`${import.meta.env.VITE_BASE_URL}/items`, {
         method: "POST",
         headers: {

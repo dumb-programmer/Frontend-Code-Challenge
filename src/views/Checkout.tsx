@@ -1,3 +1,54 @@
+import { XIcon } from "lucide-react";
+import useCartContext from "../hooks/useCartContext";
+
 export default function Checkout() {
-    return null;
+    const { items, removeItem } = useCartContext();
+
+    const totalPrice = Object.values(items).reduce((total, item) => total + (item.price * item.quantity), 0);
+
+    return <div className="flex flex-wrap items-start gap-4 overflow-x-auto">
+        <table className="table xl:max-w-3/4">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    Object.values(items).map(item => (
+                        <tr key={item.id}>
+                            <td className="flex items-center gap-4">
+                                <figure>
+                                    <img
+                                        src={`${import.meta.env.VITE_BASE_URL}/${item.img}`}
+                                        alt={item.name}
+                                        className="h-[140px] w-[284px] object-cover"
+                                    />
+                                </figure>
+                                <p className="font-bold">{item.name}</p>
+                            </td>
+                            <td>
+                                <input type="number" className="input input-bordered w-20" value={item.quantity} min={0} />
+                            </td>
+                            <td className="font-bold">PKR {item.price * item.quantity}</td>
+                            <td>
+                                <button className="btn btn-ghost btn-circle" onClick={() => removeItem(item.id)}>
+                                    <XIcon className="stroke-gray-400" height={18} width={18} />
+                                </button>
+                            </td>
+                        </tr>
+                    ))
+                }
+            </tbody>
+        </table>
+        <div className="card flex flex-col gap-8 border border-gray-200 min-w-[300px] rounded-md p-8 w-full xl:w-auto">
+            <h1 className="text-xl font-bold">Summary</h1>
+            <p>Subtotal <span className="ml-4 font-bold">PKR {totalPrice}</span></p>
+            <p>Total <span className="ml-10 font-bold">PKR {totalPrice}</span></p>
+            <button className="btn btn-primary w-full">Checkout</button>
+        </div>
+    </div>;
 }

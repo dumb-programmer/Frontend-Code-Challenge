@@ -5,7 +5,8 @@ export function getAllItems() {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
-        }
+        },
+        mode: "cors"
     });
 }
 
@@ -14,7 +15,8 @@ export function getItem(itemId: string) {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
-        }
+        },
+        mode: "cors"
     });
 }
 
@@ -24,6 +26,7 @@ export function addItem(item: Item) {
         headers: {
             "Content-Type": "application/json"
         },
+        mode: "cors",
         body: JSON.stringify(item)
     });
 }
@@ -33,6 +36,7 @@ export function deleteItem(itemId: string) {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json"
-        }
+        },
+        mode: "cors"
     });
 }

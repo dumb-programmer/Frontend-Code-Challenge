@@ -1,16 +1,20 @@
 import { XIcon } from "lucide-react";
 import useCartContext from "../hooks/useCartContext";
+import { useMemo } from "react";
 
 export default function Checkout() {
-    const { items, removeItem } = useCartContext();
+    const { items, removeItem, updateItemQuantity } = useCartContext();
+    
+    const totalPrice = useMemo(() => Object.values(items).reduce((total, item) => total + (+item.price * item.quantity), 0), [items]);
 
-    const totalPrice = Object.values(items).reduce((total, item) => total + (item.price * item.quantity), 0);
+    const handleQuantityChange = (itemId: string, qty: number) => updateItemQuantity(itemId, qty)
 
     return <div className="flex flex-wrap items-start gap-4 overflow-x-auto">
         <table className="table xl:max-w-3/4">
             <thead>
                 <tr>
                     <th>Item</th>
+                    <th>Price</th>
                     <th>Qty</th>
                     <th>Subtotal</th>
                     <th></th>
@@ -23,17 +27,26 @@ export default function Checkout() {
                             <td className="flex items-center gap-4">
                                 <figure>
                                     <img
-                                        src={`${import.meta.env.VITE_BASE_URL}/${item.img}`}
+                                        src={item.img.includes("http") ? item.img : `${import.meta.env.VITE_BASE_URL}/${item.img}`}
                                         alt={item.name}
                                         className="h-[140px] w-[284px] object-cover"
                                     />
                                 </figure>
                                 <p className="font-bold">{item.name}</p>
                             </td>
+                            <td className="font-bold">PKR {item.price}</td>
                             <td>
-                                <input type="number" className="input input-bordered w-20" value={item.quantity} min={0} />
+                                <input type="number" className="peer input input-bordered w-20 invalid:border-red-700"
+                                    onChange={(e) => {
+                                        if (e.target.validity.valid) {
+                                            handleQuantityChange(item.id, +e.target.value)
+                                        }
+                                    }}
+                                    defaultValue={item.quantity} min={1}
+                                />
+                                <p className="mt-1 text-sm text-red-700 invisible peer-invalid:visible">Quantity cannot be less than one</p>
                             </td>
-                            <td className="font-bold">PKR {item.price * item.quantity}</td>
+                            <td className="font-bold">PKR {+item.price * item.quantity}</td>
                             <td>
                                 <button className="btn btn-ghost btn-circle" onClick={() => removeItem(item.id)}>
                                     <XIcon className="stroke-gray-400" height={18} width={18} />

@@ -1,8 +1,8 @@
 import React from "react";
-import type { Item } from "../utils/types";
+import type { CartItems, Item } from "../utils/types";
 
 interface CardContext{
-    items: Item[];
+    items: CartItems;
     addItem: (item: Item) => void;
     removeItem: (itemId: string) => void;
     clearCart: () => void;

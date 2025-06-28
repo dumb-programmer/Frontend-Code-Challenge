@@ -1,20 +1,40 @@
 import { useState } from "react";
 import { CartContext } from "../context/CardContext";
-import type { Item } from "../utils/types";
+import type { CartItems, Item } from "../utils/types";
 
-export default function CartContextProvider({children}: {children: React.ReactNode}) {
-    const [items, setItems] = useState<Item[]>([]);
+export default function CartContextProvider({ children }: { children: React.ReactNode }) {
+    const [items, setItems] = useState<CartItems>({});
 
     const addItem = (item: Item) => {
-        setItems(prevItems => [...prevItems, item]);
+        setItems(prevItems => {
+            const existingItem = prevItems[item.id];
+
+            if (existingItem) {
+                return {
+                    ...prevItems,
+                    [item.id]: {
+                        ...existingItem,
+                        quantity: existingItem.quantity + 1
+                    }
+                };
+            }
+
+            return { ...prevItems, [item.id]: { ...item, quantity: 1 } };
+        });
     };
 
     const removeItem = (itemId: string) => {
-        setItems(prevItems => prevItems.filter(item => item.id !== itemId));
+        setItems(prevItems => {
+            const newItems = { ...prevItems };
+
+            delete newItems[itemId];
+
+            return newItems;
+        });
     };
 
     const clearCart = () => {
-        setItems([]);
+        setItems({});
     };
 
     return (

@@ -4,3 +4,11 @@ export interface Item {
     price: number;
     img: string;
 }
+
+export interface CartItems {
+    [key: string]: CartItem;
+}
+
+export interface CartItem extends Item {
+    quantity: number;
+}

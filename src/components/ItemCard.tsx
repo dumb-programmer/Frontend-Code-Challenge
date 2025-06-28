@@ -1,3 +1,4 @@
+import useCartContext from "../hooks/useCartContext";
 import type { Item } from "../utils/types";
 
 interface ItemCardProps {
@@ -5,6 +6,12 @@ interface ItemCardProps {
 }
 
 export default function ItemCard({ item }: ItemCardProps) {
+    const { addItem } = useCartContext();
+
+    const handleBuyNow = () => {
+        addItem(item);
+    };
+
     return (
         <div className="card bg-base-100 w-96 shadow-sm">
             <figure>
@@ -18,7 +25,7 @@ export default function ItemCard({ item }: ItemCardProps) {
                 <h2 className="card-title">{item.name}</h2>
                 <p>PKR {item.price}</p>
                 <div className="card-actions justify-end">
-                    <button className="btn btn-primary">Buy Now</button>
+                    <button className="btn btn-primary" onClick={handleBuyNow}>Buy Now</button>
                 </div>
             </div>
         </div>

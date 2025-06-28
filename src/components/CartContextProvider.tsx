@@ -1,9 +1,22 @@
-import { useState } from "react";
-import { CartContext } from "../context/CardContext";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { CartContext } from "../context/CartContext";
 import type { CartItems, Item } from "../utils/types";
 
 export default function CartContextProvider({ children }: { children: React.ReactNode }) {
     const [items, setItems] = useState<CartItems>({});
+
+    useLayoutEffect(() => {
+        const storedItems = localStorage.getItem("cartItems");
+        if (storedItems) {
+            setItems(JSON.parse(storedItems));
+        }
+    }, [])
+
+    useEffect(() => {
+        if (Object.keys(items).length > 0) {
+            localStorage.setItem("cartItems", JSON.stringify(items));
+        }
+    }, [items]);
 
     const addItem = (item: Item) => {
         setItems(prevItems => {
@@ -37,8 +50,20 @@ export default function CartContextProvider({ children }: { children: React.Reac
         setItems({});
     };
 
+    const updateItemQuantity = (itemId: string, newQty: number) => {
+        setItems(prevItems => {
+            const newItem = { ...prevItems[itemId], quantity: newQty }
+
+            const newItems = { ...prevItems };
+
+            newItems[itemId] = newItem;
+
+            return newItems;
+        })
+    }
+
     return (
-        <CartContext.Provider value={{ items, addItem, removeItem, clearCart }}>
+        <CartContext.Provider value={{ items, addItem, removeItem, updateItemQuantity, clearCart }}>
             {children}
         </CartContext.Provider>
     );

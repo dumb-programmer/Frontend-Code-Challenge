@@ -16,7 +16,7 @@ export default function ItemCard({ item }: ItemCardProps) {
         <div className="card bg-base-100 w-96 shadow-sm">
             <figure>
                 <img
-                    src={`${import.meta.env.VITE_BASE_URL}/${item.img}`}
+                    src={item.img.includes("http") ? item.img : `${import.meta.env.VITE_BASE_URL}/${item.img}`}
                     alt={item.name}
                     className="h-[240px] w-[384px] object-cover"
                 />

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import useCartContext from "../hooks/useCartContext";
 import { useMemo } from "react";
+import { useCartStore } from "../stores/cartStore";
 
 export default function Header() {
-    const { items } = useCartContext();
+    const items = useCartStore(state => state.items);
 
     const itemCount = useMemo(() => Object.values(items)?.reduce((count, item) => count + item.quantity, 0), [items]);
 

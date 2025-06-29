@@ -5,7 +5,6 @@ import Items from './views/Items'
 import CreateItem from './views/CreateItem'
 import Checkout from './views/Checkout'
 import MainLayout from './layouts/MainLayout'
-import CartContextProvider from './components/CartContextProvider'
 import './App.css'
 
 const client = new QueryClient();
@@ -13,18 +12,16 @@ const client = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={client}>
-      <CartContextProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<MainLayout />}>
-              <Route index element={<Index />} />
-              <Route path="/items" element={<Items />} />
-              <Route path="/items/create" element={<CreateItem />} />
-              <Route path="/checkout" element={<Checkout />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </CartContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Index />} />
+            <Route path="/items" element={<Items />} />
+            <Route path="/items/create" element={<CreateItem />} />
+            <Route path="/checkout" element={<Checkout />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </QueryClientProvider>
   )
 }

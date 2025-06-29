@@ -1,10 +1,10 @@
 import { XIcon } from "lucide-react";
-import useCartContext from "../hooks/useCartContext";
+import { useCartStore } from "../stores/cartStore";
 import { useMemo } from "react";
 
 export default function Checkout() {
-    const { items, removeItem, updateItemQuantity } = useCartContext();
-    
+    const { items, removeItem, updateItemQuantity } = useCartStore();
+
     const totalPrice = useMemo(() => Object.values(items).reduce((total, item) => total + (+item.price * item.quantity), 0), [items]);
 
     const handleQuantityChange = (itemId: string, qty: number) => updateItemQuantity(itemId, qty)

@@ -1,4 +1,4 @@
-import useCartContext from "../hooks/useCartContext";
+import { useCartStore } from "../stores/cartStore";
 import type { Item } from "../utils/types";
 
 interface ItemCardProps {
@@ -6,7 +6,7 @@ interface ItemCardProps {
 }
 
 export default function ItemCard({ item }: ItemCardProps) {
-    const { addItem } = useCartContext();
+    const addItem = useCartStore(state => state.addItem);
 
     const handleBuyNow = () => {
         addItem(item);

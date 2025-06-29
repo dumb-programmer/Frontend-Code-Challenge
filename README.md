@@ -2,7 +2,7 @@
 A randostore where users can put up items for sale, and other users can buy them. The application is composed of a Node.js REST API which uses an in-memory array to store the items.
 
 ## Challenge
-Build a frontend which uses the REST API with the following pages:
+Build a frontend which uses the provided REST API. It should have the following pages:
 - Items
 - Add item
 - Checkout

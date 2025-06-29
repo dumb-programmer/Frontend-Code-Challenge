@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { LoaderCircleIcon } from "lucide-react";
 import toast from "react-hot-toast";
@@ -16,6 +16,7 @@ const schema = z.object({
 })
 
 export default function CreateItem() {
+    const queryClient = useQueryClient();
     const { mutate, isPending } = useMutation({
         mutationFn: async (data: Omit<Item, "id">) => {
             const response = await addItem(data);
@@ -24,20 +25,22 @@ export default function CreateItem() {
             }
             return response.json();
         },
-        onSuccess: () => {
+        onSuccess: (data: Item) => {
+            queryClient.setQueriesData<Item[]>({ queryKey: ["items"] }, (prev) => prev ? [...prev, data] : [data])
+
             toast.success(`Item added successfully`, {
                 duration: 5000,
                 position: "bottom-right",
-            })
+            });
         },
         onError: (error: Error) => {
             toast.error(`${error.message}`, {
                 duration: 5000,
                 position: "bottom-right",
-            })
+            });
         }
     });
-    
+
     const { register, handleSubmit, formState: { errors } } = useForm<z.infer<typeof schema>>({
         resolver: zodResolver(schema)
     });
